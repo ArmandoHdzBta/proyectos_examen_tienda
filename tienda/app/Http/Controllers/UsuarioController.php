@@ -48,13 +48,19 @@ class UsuarioController extends Controller
     	if ($password1 != $password2)
     		return view('registro', ['estatus' => 'error', 'mensaje' => 'Las contraseñas no coinciden']);
 
+        $tipo_usuario = Usuario::all()->count();
+
     	$usuario = new Usuario();
     	$usuario->nombre = $nombre;
     	$usuario->apellido_pat = $app;
     	$usuario->apellido_mat = $apm;
     	$usuario->correo = $correo;
     	$usuario->password = bcrypt($password1);
-    	$usuario->tipo_usuario = 2;
+        if ($tipo_usuario == 0) {
+            $usuario->tipo_usuario = 1;
+        }else{
+            $usuario->tipo_usuario = 2;
+        }
     	$usuario->save();
 
     	return view('login', ['estatus' => 'success', 'mensaje' => 'Usuario registrado']);
