@@ -19,7 +19,7 @@
         <div class="col-md-12">
             <div class="card">
               	<div class="card-header">
-                	<h5 class="card-title">Usuario: {{ session('usuario')->nombre }}</h5>
+                	<h5 class="card-title">Usuario: {{ session('admin')->nombre }}</h5>
                 	<div class="card-tools">
 		                <button type="button" class="btn btn-tool" data-card-widget="collapse">
 		                	<i class="fas fa-minus"></i>
@@ -34,7 +34,7 @@
                       			<strong>Examen</strong>
                     		</p>
                     		<div class="col">
-                    			<form action="" method="POST">
+                    			<form action="{{ route('admin.crearExamen') }}" method="POST">
                             @csrf
                     				<div class="form-group" id="titulo">
                     					<label for="exampleInputEmail1" class="form-label">Nombre del examen: </label>

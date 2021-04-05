@@ -42,7 +42,7 @@ Route::prefix('/administrador')->middleware('AdministradorVerificar')->group(fun
 	Route::get('/home', [AdministradorController::class, 'home'])->name('admin.home');
 	//examen
 	Route::get('/crear-examen', [ExamenController::class, 'viewExamen'])->name('admin.viewExamen');
-	Route::post('/crear-examen', [ExamenController::class, 'crearExamen'])->name('admin.crearExamen');
+	Route::post('/crear-examen/examen', [ExamenController::class, 'crearExamen'])->name('admin.crearExamen');
 	Route::post('/crear-examen', [ExamenController::class, 'crearPreguntas'])->name('admin.examen.preguntas');
 	Route::get('/examenes', [ExamenController::class, 'viewExamenAll'])->name('admin.viewExamenAll');
 	Route::get('/examen/{id}', [ExamenController::class, 'verExamen'])->name('admin.verExamen');

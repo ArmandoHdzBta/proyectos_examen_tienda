@@ -6,6 +6,8 @@ use App\Models\Pregunta;
 use App\Models\Respuesta;
 use App\Models\Usuario;
 use App\Models\Examen;
+use App\Mail\ResultadosMailable;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class RespuestaController extends Controller
@@ -45,6 +47,8 @@ class RespuestaController extends Controller
     	$usuario->total_respuestas = $usuario_preguntas_total;
     	$usuario->total_respuestas_mal = $usuario_preguntas_total_mal;
     	$usuario->save();
+
+        $usuarioMail = Usuario::where('id', session('usuario')->id)->first();
 
     	return view('examen-ok', ['estatus' => 'success', 'mensaje' => 'Examen contestado']);
     }

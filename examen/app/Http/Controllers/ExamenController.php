@@ -58,16 +58,18 @@ class ExamenController extends Controller
 
     public function crearPreguntas(Request $datos){
 
-    	for ($i=0; $i < sizeof($datos->texto); $i++) {
-    		$pregunta = new Pregunta();
-    		$pregunta->texto = $datos->texto[$i];
-    		$pregunta->respuesta_ok = $datos->pregunta1[$i];
-    		$pregunta->respuesta2 = $datos->pregunta2[$i];
-    		$pregunta->respuesta3 = $datos->pregunta3[$i];
-    		$pregunta->examen_id = $datos->examen_id;
-    		$pregunta->save();
-    	}
-    	return view('crear-examen', ['estatusP' => 'success', 'mensaje' => '¡Preguntas añadidas!']);
+       $num = sizeof($datos->texto);
+        for ($i=0; $i < $num; $i++) {
+            $pregunta = new Pregunta();
+            $pregunta->texto = $datos->texto[$i];
+            $pregunta->respuesta_ok = $datos->pregunta1[$i];
+            $pregunta->respuesta2 = $datos->pregunta2[$i];
+            $pregunta->respuesta3 = $datos->pregunta3[$i];
+            $pregunta->examen_id = $datos->examen_id;
+            $pregunta->save();
+        }
+        return view('crear-examen', ['estatusP' => 'success', 'mensaje' => '¡Preguntas añadidas!']);
+
     }
 
 }

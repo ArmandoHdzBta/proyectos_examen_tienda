@@ -6,6 +6,8 @@ use App\Models\Examen;
 use App\Models\Pregunta;
 use App\Models\Respuesta;
 use App\Models\Usuario;
+use App\Mail\ResultadosMailable;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -48,13 +50,18 @@ class UsuarioController extends Controller
     {
     	$examen = Examen::where('id', $id)->first();
     	$preguntas = Pregunta::where('examen_id', $id)->get();
-    	$respuesta = Respuesta::where('usuario_id', session('usuario')->id)->where('estatus', 1)->orWhere('estatus', 0)->get()->count();
+    	$respuesta = Respuesta::where('usuario_id', session('usuario')->id)->get()->count();
     	if($respuesta)
     		return view('examen-ok', ['estatus' => 'success', 'mensaje' => 'Examen contestado']);
 
     	$usuario = Usuario::find(session('usuario')->id);
     	$usuario->examen_id = $id;
     	$usuario->save();
+
+    	$usuarioMail = Usuario::where('id', session('usuario')->id)->first();
+
+    	$correo =  new ResultadosMailable();
+		Mail::to($usuarioMail->correo)->send($correo);
 
     	return view('contestar-examen', ['examen' => $examen ,'preguntas' => $preguntas]);
     }
@@ -90,12 +97,7 @@ class UsuarioController extends Controller
  		$usuario->apellido_mat = $apm;
     	$usuario->correo = $correo;
     	$usuario->password = bcrypt($password);
-	if ($examen){
-		$usuario->examen_id = $examen->id ;
-	}else{
-		$usuario->examen_id =  1;
-	}
-
+    	$usuario->examen_id = $examen->id;
     	$usuario->save();
 
     	return view('usuario-login', ['estatus' => 'success' ,'mensaje' => 'Usuario registrado']);
