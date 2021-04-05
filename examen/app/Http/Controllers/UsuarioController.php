@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResultadosMailable;
 use App\Models\Examen;
 use App\Models\Pregunta;
 use App\Models\Respuesta;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class UsuarioController extends Controller
@@ -49,7 +51,7 @@ class UsuarioController extends Controller
     	$examen = Examen::where('id', $id)->first();
     	$preguntas = Pregunta::where('examen_id', $id)->get();
     	$respuesta = Respuesta::where('usuario_id', session('usuario')->id)->where('estatus', 1)->orWhere('estatus', 0)->get()->count();
-    	if($respuesta)
+    	if(!$respuesta)
     		return view('examen-ok', ['estatus' => 'success', 'mensaje' => 'Examen contestado']);
 
     	$usuario = Usuario::find(session('usuario')->id);
@@ -133,6 +135,13 @@ class UsuarioController extends Controller
     	$usuario->apellido_mat = $datos->apm;
     	$usuario->correo = $datos->correo;
     	$usuario->save();
+    }
+
+    public function correo()
+    {
+        $correo = new ResultadosMailable();
+        Mail::to(session('usuario')->correo)->send($correo);
+        return redirect()->route('usuario.home');
     }
 
     public function cerrarSesion()

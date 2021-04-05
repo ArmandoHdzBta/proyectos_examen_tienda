@@ -46,6 +46,7 @@ Route::prefix('/administrador')->middleware('AdministradorVerificar')->group(fun
 	Route::post('/crear-examen', [ExamenController::class, 'crearPreguntas'])->name('admin.examen.preguntas');
 	Route::get('/examenes', [ExamenController::class, 'viewExamenAll'])->name('admin.viewExamenAll');
 	Route::get('/examen/{id}', [ExamenController::class, 'verExamen'])->name('admin.verExamen');
+
 	//pdf
 	Route::get('/usuarioPDF/{id}', [UsuarioPDFController::class, 'PDF'])->name('usuario.downPDF');
 });
